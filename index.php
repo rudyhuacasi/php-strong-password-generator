@@ -1,36 +1,5 @@
 <?php
-
-// function per generare password
-function generatePassword($length, $allowRepeats, $includeLetters, $includeNumbers, $includeSymbols){
-    // variabili per le lettere , numeri e simboli
-    $letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $numbers = '0123456789';
-    $symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-    // condizionale per unire lettere , numeri e simboli
-    $characters = '';
-    if ($includeLetters) $characters .= $letters;
-    if ($includeNumbers) $characters .= $numbers;
-    if ($includeSymbols) $characters .= $symbols;
-
-    // una condizionale per scegliere un carattere
-    if (strlen($characters) == 0) {
-        return 'Seleziona almeno un tipo di carattere.';
-    }
-
-    // genera password randomico con delle lettere , numeri e simboli
-    $password = '';
-    $charactersLength = strlen($characters);
-    for ($i = 0; $i < $length; $i++) {
-        $randomChar = $characters[random_int(0, $charactersLength - 1)];
-        if (!$allowRepeats && strpos($password, $randomChar) !== false) {
-            $i--;
-            continue;
-        }
-        $password .= $randomChar;
-    }
-    return $password;
-}
+include_once __DIR__ . '/functions.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,23 +21,8 @@ function generatePassword($length, $allowRepeats, $includeLetters, $includeNumbe
     <main>
         <div class="bg-primary-subtle container rounded">
             <!-- genera password -->
-            <?php 
-            if (isset($_GET['password_length'])) {
-                $length = intval($_GET['password_length']);
-                $allowRepeats = isset($_GET['repeats']) && $_GET['repeats'] == 'yes';
-                $includeLetters = isset($_GET['letters']);
-                $includeNumbers = isset($_GET['numbers']);
-                $includeSymbols = isset($_GET['symbols']);
-                // genera una condizionale per una password generata e una lunghezza che non è valida
-                if ($length > 0) {
-                    $password = generatePassword($length, $allowRepeats, $includeLetters, $includeNumbers, $includeSymbols);
-                    echo "<p class='py-3 px-2 w-100'>Password generata: $password</p>";
-                } else {
-                    echo "<p class='py-3 px-2 w-100'>Inserisci una lunghezza valida.</p>";
-                }
-            } else {
-                echo "<p class='py-3 px-2 w-100'>Nessun parametro valido inserito</p>";
-            }
+            <?php
+            include_once __DIR__ . '/genera.php';
             ?>
         </div>
         <!-- parametri per la passsword -->
